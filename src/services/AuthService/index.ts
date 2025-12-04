@@ -52,3 +52,22 @@ export const getCurrentUser = async () => {
     return null;
   }
 };
+
+export const reCaptchaVerify = async (token: string) => {
+  try {
+    const res = await fetch("https://www.google.com/recaptcha/api/siteverify", {
+      method: "POST",
+      headers: {
+        "Content-Type": "Application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({
+        secret: process.env.NEXT_PUBLIC_RECAPTCHA_SERVER_KEY!, // / ! mane undefined asbe na kakhn o
+        response: token,
+      }),
+    });
+    return res.json();
+  } catch (error: any) {
+    console.log("token verified error google captcha");
+    return Error(error);
+  }
+};

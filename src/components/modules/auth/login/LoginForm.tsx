@@ -1,4 +1,5 @@
 "use client";
+import ReCAPTCHA from "react-google-recaptcha";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -13,13 +14,16 @@ import Link from "next/link";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginValidationSchema } from "./loginValidationSchema";
-import { loginUser } from "@/services/AuthService";
+import { loginUser, reCaptchaVerify } from "@/services/AuthService";
 import { toast } from "sonner";
+import { useState } from "react";
 
 const LoginForm = () => {
   const form = useForm({
     resolver: zodResolver(loginValidationSchema),
   });
+
+  const [recaptchaStatus, setReCaptchaStatus] = useState(false);
   const {
     formState: { isSubmitting },
   } = form;
@@ -31,7 +35,17 @@ const LoginForm = () => {
       toast.error(res?.message);
     }
   };
-
+  const handleReCaptcha = async (value: string | null) => {
+    try {
+      const res = await reCaptchaVerify(value!);
+      if (res?.success) {
+        setReCaptchaStatus(true);
+      }
+      console.log(res);
+    } catch (error: any) {
+      console.log(error);
+    }
+  };
   return (
     <div className="max-w-md mx-auto bg-white p-8 rounded-lg shadow-md mt-10">
       <div className="flex justify-center mb-2">
@@ -68,7 +82,6 @@ const LoginForm = () => {
               </FormItem>
             )}
           />
-
           {/* Password Field */}
           <FormField
             control={form.control}
@@ -92,9 +105,13 @@ const LoginForm = () => {
               </FormItem>
             )}
           />
-
+          <ReCAPTCHA
+            sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_CLIENT_KEY as string}
+            onChange={handleReCaptcha}
+          />
+          ,
           <Button
-            disabled={isSubmitting}
+            disabled={recaptchaStatus ? false : true}
             className="w-full bg-blue-600 hover:bg-blue-700"
             type="submit"
           >

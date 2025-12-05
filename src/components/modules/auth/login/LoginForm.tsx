@@ -105,10 +105,12 @@ const LoginForm = () => {
               </FormItem>
             )}
           />
-          <ReCAPTCHA
-            sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_CLIENT_KEY as string}
-            onChange={handleReCaptcha}
-          />
+          <div className="flex justify-center ">
+            <ReCAPTCHA
+              sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_CLIENT_KEY as string}
+              onChange={handleReCaptcha}
+            />
+          </div>
           ,
           <Button
             disabled={recaptchaStatus ? false : true}

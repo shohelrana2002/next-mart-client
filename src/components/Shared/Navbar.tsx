@@ -1,13 +1,30 @@
 "use client";
 import { useState } from "react";
-import { ShoppingCart, Search, User, Menu, X } from "lucide-react";
+import { ShoppingCart, Search, User, Menu, X, LogOut } from "lucide-react";
 import Link from "next/link";
 import Logo from "@/app/assets/svg/Logo";
+import { Button } from "../ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { logout } from "@/services/AuthService";
+import { useUser } from "@/context/UserContext";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false); // mobile menu
   const [showSearch, setShowSearch] = useState(false); // mobile search
-
+  const { user, setIsLoading } = useUser();
+  const handleLogout = () => {
+    console.log("object");
+    logout();
+    setIsLoading(true);
+  };
   return (
     <nav className="bg-white shadow-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -38,7 +55,50 @@ export default function Navbar() {
                 0
               </span>
             </div>
-            <User className="w-6 h-6 cursor-pointer hover:text-blue-600" />
+            {user ? (
+              <>
+                <Link href={"/create-shop"}>
+                  <Button className="rounded-full" variant="destructive">
+                    Create Shop
+                  </Button>
+                </Link>
+
+                <DropdownMenu>
+                  <DropdownMenuTrigger>
+                    <Avatar className="cursor-pointer">
+                      <AvatarImage src="https://github.com/shadcn.png" />
+                      <AvatarFallback>User</AvatarFallback>
+                    </Avatar>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem className="cursor-pointer">
+                      Profile
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="cursor-pointer">
+                      Dashboard
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="cursor-pointer">
+                      My Shop
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      onClick={handleLogout}
+                      className="cursor-pointer"
+                    >
+                      <LogOut /> <span>Logout</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </>
+            ) : (
+              <Link href={"/login"}>
+                <Button className="rounded-full" variant="destructive">
+                  Login
+                </Button>
+              </Link>
+            )}
           </div>
 
           {/* Mobile Buttons */}

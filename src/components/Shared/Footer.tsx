@@ -31,12 +31,12 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/categories" className="hover:text-white">
+                <Link href="/categories" className="hover:text-black">
                   Categories
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="hover:text-white">
+                <Link href="/contact" className="hover:text-black">
                   Contact
                 </Link>
               </li>

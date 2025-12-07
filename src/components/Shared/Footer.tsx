@@ -43,7 +43,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Contact */}
+          {/* Contact addd */}
           <div>
             <h2 className="text-xl font-semibold text-white mb-3">Contact</h2>
             <p className="text-black">Email: support@nextmart.com</p>
